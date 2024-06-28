@@ -1,4 +1,5 @@
 import collections
+from datetime import timedelta
 import heapq
 import json
 import time
@@ -203,7 +204,7 @@ def run_once(run_algorithm):
     start_at = time.time()
     result, visited_count = run_algorithm()
     end_at = time.time()
-    time_lapsed = end_at - start_at
+    time_lapsed = str(timedelta(seconds=end_at - start_at))
     if not result:
         return {"time": time_lapsed, "moves": None, "visited": visited_count}
 
@@ -212,7 +213,7 @@ def run_once(run_algorithm):
     while node.parent is not None:
         moves.append(node.action[0])
         node = node.parent
-    return {"time": time_lapsed, "moves": len(moves)}
+    return {"time": time_lapsed, "moves": len(moves), "visited": visited_count}
 
 
 def chunks(linear_list):
@@ -235,6 +236,7 @@ def run():
 
     for current in state:
         yield {
+            "input": current,
             "a_star_hamming": run_once(
                 lambda: a_star_search(
                     current,
